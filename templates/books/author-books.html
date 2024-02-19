@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load media %}
+
+{% block title %} Author-books {% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Authors</h1>
+        {% for author in authors %}
+            <div class="col-2">
+                <img src="{{ author.avatar }}">
+            </div>
+            <div>
+                <h3>{{ author.first_name }} {{ author.last_name }}</h3>
+                <p><a href="#">{{ author.website }}</a></p>
+            </div>
+        {% endfor %}
+
+    </div>
+
+
+{% endblock %}
