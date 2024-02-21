@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
-from django.views.generic import DetailView, ListView
 
 from apps.books.forms import AddBookReviewForm
 from apps.books.models import Book, BookReview
@@ -53,7 +54,12 @@ class AddReviewView(View):
             }
             return render(request, "books/book-detail.html", context=context)
 
-
-class BookReviewsView(ListView):
-    model = BookReview
-    template_name = "books/book-detail.html"
+@login_required()
+def review_delete(requet, pk):
+    post = get_object_or_404(BookReview, pk=pk)
+    if requet.method == "POST":
+        messages.success(requet, "post successfully deleted")
+        post.delete()
+        return redirect(reverse('books:book-detail', kwargs={"username": requet.user.username}))
+    else:
+        return render(requet, "books:book-detail", {"post": post})
